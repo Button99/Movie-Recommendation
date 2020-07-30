@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import pyqtSlot
+import Rec as r
 
 
 class App(QWidget):
@@ -46,6 +47,13 @@ class App(QWidget):
         f=open("SimMovie.txt", "w")
         f.write(txtValue)
         f.close()
+
+        alert= QMessageBox()
+        r.ReadFile()
+        f=open("Rec_Movies.csv", "r")
+        movies= f.read()
+        alert.setText(str(movies))
+        alert.exec_()
 
     def click_CancelButton(self):
         print("Cancel button click")
