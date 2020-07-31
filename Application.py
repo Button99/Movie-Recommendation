@@ -1,8 +1,12 @@
+''' Creating GUI '''
+
+
+
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import pyqtSlot
+# Import Rec.py
 import Rec as r
-
 
 class App(QWidget):
 
@@ -34,27 +38,32 @@ class App(QWidget):
         self.button2.clicked.connect(self.click_CancelButton)
 
         text= QLineEdit("Click")
-        #text.move(70, 100)
 
         self.show()
 
     @pyqtSlot()
+    # Function if the user clicks the Search button
+
     def click_SearchButton(self):
         print("Search button click")
         txtValue= self.textbox.text()
         print(txtValue)
-        # File Creation
+        # File Creation and writting the textbox data
         f=open("SimMovie.txt", "w")
         f.write(txtValue)
         f.close()
 
+        # Creating messagebox and showing the recommendations
         alert= QMessageBox()
+        # Function from Rec.py file
         r.ReadFile()
         f=open("Rec_Movies.csv", "r")
         movies= f.read()
+        # Showing the movies
         alert.setText(str(movies))
         alert.exec_()
 
+    # Function if the user clicks the cancel button
     def click_CancelButton(self):
         print("Cancel button click")
         sys.exit(app.exec_())

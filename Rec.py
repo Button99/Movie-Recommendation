@@ -2,23 +2,34 @@ import pickle
 import pandas as pd
 
 def ReadFile():
-    df_movies= pd.read_csv("Movies.csv")
+    # Reading the csv file with the movies and load the cosine_similarity
+    df_movies= pd.read_csv("Mov.csv")
     cosine_sim= pickle.load(open("cos.pkl", "rb"))
+    # Open movie file from the textbox
     f= open("SimMovie.txt", "r")
     movie_title= f.read()
     f.close()
     df_movies = df_movies.reset_index()
     indices = pd.Series(df_movies.index, index=df_movies["title"])
-    movies= get_recom(movie_title, cosine_sim, indices, df_movies)
-    f=open("Rec_Movies.csv", "w")
-    f.write(str(movies))
-    f.close()
+    try:
+        movies= get_recom(movie_title, cosine_sim, indices, df_movies)
+        f = open("Rec_Movies.csv", "w")
+        f.write(str(movies))
+        f.close()
+    except KeyError:
+        f= open("Rec_Movies.csv", "w")
+        f.write("Movie not found")
+        f.close()
+    except ValueError:
+        f= open("Rec_Movies.csv", "w")
+        f.write("Movie not found!")
 
+# Get the recommendations of the movies
 def get_recom(title, cosine_sim, indices, df_movies):
-    # Get the index of the movie that matches the title
+    # Get the index of the movie
     idx = indices[title]
 
-    # Get the pairwise similarity scores of all movies with that movie
+    # Get the similarity scores of all movies
     sim_scores = list(enumerate(cosine_sim[idx]))
 
     # Sort the movies
